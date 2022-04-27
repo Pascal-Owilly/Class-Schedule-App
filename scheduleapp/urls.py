@@ -12,5 +12,6 @@ router.register(r'announcements', AnnouncementsList)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/comments', views.CommentList.as_view()),
+    path('api/comments/', views.CommentList.as_view()),
+    path('api/sessions/', views.Sessions.as_view()),
 ]

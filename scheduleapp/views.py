@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import AnnouncementSeializers, CommentsSerializer
-from .models import Announcements, Comments
+from .serializers import AnnouncementSeializers, CommentsSerializer, SessionSerializer
+from .models import Announcements, Comments, Session
 
 # Create your views here.
 class AnnouncementsList(viewsets.ModelViewSet):
@@ -26,7 +26,21 @@ class CommentList(APIView):
         serializers = CommentsSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_OK)
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class Sessions(APIView):
+    def get(self, request, *args, **kwargs):
+        session = Session.objects.all()
+        serializer = SessionSerializer(session, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, format=None):
+        serializer = SessionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 

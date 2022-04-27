@@ -33,7 +33,7 @@ class Announcements(models.Model):
   message = models.TextField()
   user = models.ForeignKey(User,on_delete = models.CASCADE)
   date_created= models.DateTimeField(auto_now_add=True)
-  date_updated= models.DateTimeField( auto_now_add = True)
+  date_updated= models.DateTimeField( auto_now = True)
 
   def __str__(self):
     self.title 
@@ -53,6 +53,15 @@ class Comments(models.Model):
 
   def save_comment(self):
     self.save()
+
+
+class Session(models.Model):
+  name = models.CharField(max_length=255)
+  time = models.DateTimeField()
+  link = models.URLField()
+  attendees = models.ManyToManyField(User, related_name="user")
+  posted_by = models.ForeignKey(User,on_delete = models.CASCADE, default=None)
+
 
 
 
