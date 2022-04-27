@@ -35,8 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'rest_framework',
-    'cloudinary',
-    'scheduleapp.apps.ScheduleappConfig'
+    'scheduleapp.apps.ScheduleappConfig',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
