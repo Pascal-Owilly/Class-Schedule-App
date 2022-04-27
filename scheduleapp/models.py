@@ -21,6 +21,9 @@ class Profile(models.Model):
 
  def delete_student(self): 
   self.delete()
+  
+def __str__(self):
+        return self.username
 
 
 class Course(models.Model):
