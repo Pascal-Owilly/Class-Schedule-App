@@ -154,3 +154,6 @@ cloudinary.config(
   'api_key', 
   'api_secret'
 )
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+django_heroku.settings(locals())
