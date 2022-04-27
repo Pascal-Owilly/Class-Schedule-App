@@ -44,14 +44,14 @@ class Announcements(models.Model):
 
 class Comments(models.Model):
   announcement = models.ForeignKey(Announcements, related_name='comments', on_delete=models.CASCADE)
-  comment = models.TimeField()
+  comment = models.TextField()
   name = models.ForeignKey(User,on_delete = models.CASCADE)
   date_posted = models.DateTimeField( auto_now_add = True)
 
   def __str__(self):
-    return '%s - %s' % (self.announcement.title, self.name)
+    return self.comment
 
-  def save_comment(self)
+  def save_comment(self):
     self.save()
 
 
