@@ -9,11 +9,6 @@ from .models import Announcements, Comments
 class AnnouncementsList(viewsets.ModelViewSet):
     serializer_class = AnnouncementSeializers
     queryset = Announcements.objects.all()
-
-
-# class CommentList(viewsets.ModelViewSet):
-#     serializer_class = CommentsSerializer
-#     queryset = Comments.objects.all()
     
 
 class CommentList(APIView):

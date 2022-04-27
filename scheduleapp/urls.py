@@ -5,10 +5,6 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'announcements', AnnouncementsList)
-# router.register(r'comment', CommentList)
-
-
-# urlpatterns = router.urls
 
 urlpatterns = [
     path('api/', include(router.urls)),
