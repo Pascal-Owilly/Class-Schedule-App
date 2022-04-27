@@ -5,7 +5,7 @@ from .models import Announcements
 
 # Create your views here.
 class AnnouncementsList(viewsets.ModelViewSet):
-    serializers_class = AnnouncementSeializers
+    serializer_class = AnnouncementSeializers
     queryset = Announcements.objects.all()
     
 

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'scheduleapp',
     # 'bootstrap4',
     'cloudinary',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
