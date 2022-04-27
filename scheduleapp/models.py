@@ -29,18 +29,30 @@ class Course(models.Model):
 
 
 class Announcements(models.Model):
-  message = models.CharField(max_length= 500)
-  announcement = models.TextField()
+  title = models.CharField(max_length= 500)
+  message = models.TextField()
   user = models.ForeignKey(User,on_delete = models.CASCADE)
   date_created= models.DateTimeField(auto_now_add=True)
   date_updated= models.DateTimeField( auto_now_add = True)
 
   def __str__(self):
-    self.message 
+    self.title 
 
   def save_announcements(self):
     self.save()
 
+
+class Comments(models.Model):
+  announcement = models.ForeignKey(Announcements, related_name='comments', on_delete=models.CASCADE)
+  comment = models.TimeField()
+  name = models.ForeignKey(User,on_delete = models.CASCADE)
+  date_posted = models.DateTimeField( auto_now_add = True)
+
+  def __str__(self):
+    return '%s - %s' % (self.announcement.title, self.name)
+
+  def save_comment(self)
+    self.save()
 
 
 
