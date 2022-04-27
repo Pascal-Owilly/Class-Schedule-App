@@ -142,3 +142,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#cloudinary configuration
+CLOUDINARY_STORAGE={
+  "CLOUD_NAME" : "dvw5lvtgn", 
+  "API_KEY" : "246526714253898", 
+  "API_SECRET " : "j-MhfuK3-h94Zxvr2JeCHK_Swuw" 
+}
+cloudinary.config( 
+  'cloud_name',
+  'api_key', 
+  'api_secret'
+)
