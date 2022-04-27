@@ -33,9 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hood.apps.ScheduleappConfig',
-    'bootstrap4',
     'cloudinary',
+    'scheduleapp.apps.ScheduleappConfig'
 ]
 
 MIDDLEWARE = [
@@ -150,9 +149,9 @@ CLOUDINARY_STORAGE={
   "API_SECRET " : "j-MhfuK3-h94Zxvr2JeCHK_Swuw" 
 }
 cloudinary.config( 
-  'cloud_name',
-  'api_key', 
-  'api_secret'
+  cloud_name = "dvw5lvtgn", 
+  api_key = "246526714253898", 
+  api_secret = "j-MhfuK3-h94Zxvr2JeCHK_Swuw" 
 )
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
