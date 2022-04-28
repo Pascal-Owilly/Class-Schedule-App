@@ -32,7 +32,7 @@ class Announcements(models.Model):
   message = models.TextField()
   user = models.ForeignKey(User,on_delete = models.CASCADE)
   date_created= models.DateTimeField(auto_now_add=True)
-  date_updated= models.DateTimeField( auto_now_add = True)
+  date_updated= models.DateTimeField( auto_now = True)
 
   def __str__(self):
     self.title 
@@ -57,12 +57,12 @@ class Student(models.Model):
  student = models.ForeignKey(User,on_delete = models.CASCADE)
  course = models.ForeignKey(Course,on_delete = models.CASCADE)
 
-
- def save_student(self):
-  self.save()
-
- def delete_student(self):
-  self.delete()
+class Session(models.Model):
+  name = models.CharField(max_length=255)
+  time = models.DateTimeField()
+  link = models.URLField()
+  attendees = models.ManyToManyField(User, related_name="user")
+  posted_by = models.ForeignKey(User,on_delete = models.CASCADE, default=None)
 
 class Attendance(models.Model):
   attendance =  models.IntegerField()
