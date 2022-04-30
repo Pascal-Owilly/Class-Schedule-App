@@ -9,10 +9,10 @@ router.register(r'announcements', AnnouncementsList)
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/comments/', views.CommentList.as_view()),
-    re_path(r'api/comments/(?P<pk>[0-9]+)/$',
-        views.SingleComment.as_view()),
+    re_path(r'api/comments/(?P<pk>[0-9]+)/$',views.SingleComment.as_view()),
     path('api/sessions/', views.Sessions.as_view()),
-    re_path(r'api/sessions/(?P<pk>[0-9]+)/$',
-        views.SingleSession.as_view())
+    re_path(r'api/sessions/(?P<pk>[0-9]+)/$', views.SingleSession.as_view()),
+    path('students/', views.Students.as_view()),
+    path('attendance/<int:pk>', views.Attendance.as_view()),
 ]
 

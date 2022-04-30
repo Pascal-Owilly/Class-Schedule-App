@@ -3,8 +3,8 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import AnnouncementSeializers, CommentsSerializer, SessionSerializer
-from .models import Announcements, Comments, Session
+from .serializers import AnnouncementSeializers, CommentsSerializer, SessionSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
+from .models import Announcements, Comments, Session, Student
 
 # Create your views here.
 class AnnouncementsList(viewsets.ModelViewSet):
@@ -93,3 +93,40 @@ class SingleSession(APIView):
         session = self.get_session(pk)
         session.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class Students(APIView):
+    def get(self, request, format=None):
+        all_students= Student.objects.all()
+        serializers = StudentSerializer(all_students, many=True)
+        return Response(serializers.data)
+    
+    def post(self, request, format=None):
+        serializers = StudentSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Attendance(APIView):
+    def get_attendance(self, pk):
+        try:
+            return Attendance.objects.get(pk=pk)
+        except Attendance.DoesNotExist:
+            return Http404
+
+    def get(self, request, pk, format=None):
+        attendance = self.get_attendance(pk)
+        serializer = AttendanceSerializer(attendance)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        attendance = self.get_attendance(pk)
+        serializers = AttendanceSerializer(attendance, request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
