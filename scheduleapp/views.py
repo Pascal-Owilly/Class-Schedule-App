@@ -3,6 +3,8 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse, JsonResponse
+
 from .serializers import AnnouncementSeializers, CommentsSerializer, SessionSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
 from .models import Announcements, Comments, Session, Student
 from django.contrib.auth.models import User
@@ -17,14 +19,14 @@ class CommentList(APIView):
     def get(self, request, format=None):
         all_comments= Comments.objects.all()
         serializers = CommentsSerializer(all_comments, many=True)
-        return Response(serializers.data)
+        return JsonResponse(serializers.data, safe=False)
     
     def post(self, request, format=None):
         serializers = CommentsSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializers.data, safe=False, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 class SingleComment(APIView):
     def get_comment(self, pk):
@@ -36,21 +38,21 @@ class SingleComment(APIView):
     def get(self, request, pk, format=None):
         comments = self.get_comment(pk)
         serializer = CommentsSerializer(comments)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data, safe=False)
 
     def put(self, request, pk, format=None):
         comments = self.get_comment(pk)
         serializers = CommentsSerializer(comments, request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data)
+            return JsonResponse(serializers.data, safe=False)
         else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
     def delete(self, request, pk, format=None):
         comments = self.get_comment(pk)
         comments.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT, safe=False)
 
         
 
@@ -60,14 +62,14 @@ class Sessions(APIView):
     def get(self, request, *args, **kwargs):
         session = Session.objects.all()
         serializer = SessionSerializer(session, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
 
     def post(self, request, format=None):
         serializer = SessionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 class SingleSession(APIView):
     def get_session(self, pk):
@@ -79,35 +81,35 @@ class SingleSession(APIView):
     def get(self, request, pk, format=None):
         session = self.get_session(pk)
         serializer = SessionSerializer(session)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data)
 
     def put(self, request, pk, format=None):
         session = self.get_session(pk)
         serializers = SessionSerializer(session, request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data)
+            return JsonResponse(serializers.data, safe=False)
         else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
     def delete(self, request, pk, format=None):
         session = self.get_session(pk)
         session.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(status=status.HTTP_204_NO_CONTENT)
 
 
 class Students(APIView):
     def get(self, request, format=None):
         all_students= Student.objects.all()
         serializers = StudentSerializer(all_students, many=True)
-        return Response(serializers.data)
+        return JsonResponse(serializers.data,  safe=False)
     
     def post(self, request, format=None):
         serializers = StudentSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializers.data, status=status.HTTP_201_CREATED, safe=False)
+        return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 
 class Attendance(APIView):
@@ -120,14 +122,14 @@ class Attendance(APIView):
     def get(self, request, pk, format=None):
         attendance = self.get_attendance(pk)
         serializer = AttendanceSerializer(attendance)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data)
 
     def put(self, request, pk, format=None):
         attendance = self.get_attendance(pk)
         serializers = AttendanceSerializer(attendance, request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data)
+            return JsonResponse(serializers.data, safe=False)
         else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
     
