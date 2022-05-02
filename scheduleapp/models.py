@@ -8,12 +8,12 @@ class Profile(models.Model):
   profile_pic = CloudinaryField('image')
   role = models.CharField(max_length=20)
  
-
   def save_profile(self):
     self.save()
 
   def delete_profile(self): 
     self.delete()
+
 
 class Course(models.Model):
  course_name = models.CharField(max_length=500)
@@ -54,6 +54,11 @@ class Comments(models.Model):
 class Student(models.Model):
  student = models.ForeignKey(User,on_delete = models.CASCADE)
  course = models.ForeignKey(Course,on_delete = models.CASCADE)
+ def save_student(self):
+    self.save()
+    
+ def delete_student(self):
+    self.delete()
 
 class Session(models.Model):
   name = models.CharField(max_length=255)
