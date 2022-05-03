@@ -44,7 +44,8 @@ class CustomAuthToken(ObtainAuthToken):
         return Response({
             'token':token.key,
             'user_id':user.pk,
-            'is_student':user.is_student
+            'is_student':user.is_student,
+            'is_tm':user.is_tm
         })
 
 
