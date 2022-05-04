@@ -8,10 +8,11 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from .permissions import IsTmUser, IsStudentUser
-from .serializers import AnnouncementSerializers, CommentsSerializer, SessionSerializer,UserSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
+from .serializers import AnnouncementSerializers,LoginSerializer, CommentsSerializer, SessionSerializer,UserSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
 from .models import Announcements, Comments,Course, Profile, Session, Student
 from django.contrib.auth.models import User
 from rest_framework.generics import GenericAPIView
+from django.contrib import auth
 
 # Create your views here.
 class AnnouncementsList(viewsets.ModelViewSet):
@@ -184,4 +185,28 @@ class Courses(APIView):
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
  
-    
+class Userprofile(APIView):  
+    def get(self,request):
+        user = request.user
+        
+        serializer = ProfileSerializer(user)
+        return Response(serializer.data)
+
+class LoginView(GenericAPIView):
+    serializer_class= LoginSerializer
+
+    def post(self, request):
+        data = request.data
+        username = data.get('username', '')
+        password = data.get('password', '')
+        user = auth.authenticate(username=username, password=password)
+
+
+        if user:
+            serializer = UserSerializer(user)
+            data = {'user': serializer.data}
+            return Response(data, status=status.HTTP_200_OK)
+            
+
+        #SEDN RES
+        return Response({'detail': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
