@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'scheduleapp.apps.ScheduleappConfig',
     'tinymce',
     'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -162,3 +163,13 @@ cloudinary.config(
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 django_heroku.settings(locals())
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
+
+# AUTH_USER_MODEL="scheduleapp.Profile"
+ACCOUNT_UNIQUE_EMAIL=True

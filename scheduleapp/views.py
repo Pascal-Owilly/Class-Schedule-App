@@ -1,17 +1,21 @@
 from django.http import Http404
 from django.shortcuts import render
-from rest_framework import viewsets, status
+from rest_framework import generics, permissions, status,viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, JsonResponse
-
-from .serializers import AnnouncementSeializers, CommentsSerializer, SessionSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
-from .models import Announcements, Comments, Session, Student
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
+from .permissions import IsTmUser, IsStudentUser
+from .serializers import AnnouncementSerializers, CommentsSerializer, SessionSerializer,UserSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
+from .models import Announcements, Comments,Course, Profile, Session, Student
 from django.contrib.auth.models import User
+from rest_framework.generics import GenericAPIView
 
 # Create your views here.
 class AnnouncementsList(viewsets.ModelViewSet):
-    serializer_class = AnnouncementSeializers
+    serializer_class = AnnouncementSerializers
     queryset = Announcements.objects.all()
     
 
@@ -19,14 +23,14 @@ class CommentList(APIView):
     def get(self, request, format=None):
         all_comments= Comments.objects.all()
         serializers = CommentsSerializer(all_comments, many=True)
-        return JsonResponse(serializers.data, safe=False)
+        return Response(serializers.data)
     
     def post(self, request, format=None):
         serializers = CommentsSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return JsonResponse(serializers.data, safe=False, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
+            return JsonResponse(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SingleComment(APIView):
     def get_comment(self, pk):
@@ -38,21 +42,21 @@ class SingleComment(APIView):
     def get(self, request, pk, format=None):
         comments = self.get_comment(pk)
         serializer = CommentsSerializer(comments)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         comments = self.get_comment(pk)
         serializers = CommentsSerializer(comments, request.data)
         if serializers.is_valid():
             serializers.save()
-            return JsonResponse(serializers.data, safe=False)
+            return Response(serializers.data)
         else:
-            return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
         comments = self.get_comment(pk)
         comments.delete()
-        return JsonResponse(status=status.HTTP_204_NO_CONTENT, safe=False)
+        return Response(status=status.HTTP_204_NO_CONTENT, safe=False)
 
         
 
@@ -99,17 +103,18 @@ class SingleSession(APIView):
 
 
 class Students(APIView):
+    
     def get(self, request, format=None):
         all_students= Student.objects.all()
         serializers = StudentSerializer(all_students, many=True)
-        return JsonResponse(serializers.data,  safe=False)
+        return Response(serializers.data)
     
     def post(self, request, format=None):
         serializers = StudentSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return JsonResponse(serializers.data, status=status.HTTP_201_CREATED, safe=False)
-        return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Attendance(APIView):
@@ -132,4 +137,51 @@ class Attendance(APIView):
             return JsonResponse(serializers.data, safe=False)
         else:
             return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
+    
+
+class StudentOnlyView(generics.RetrieveAPIView):
+    permission_classes=[permissions.IsAuthenticated&IsStudentUser]
+    serializer_class=UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+class TmOnlyView(generics.RetrieveAPIView):
+    permission_classes=[permissions.IsAuthenticated&IsTmUser]
+    serializer_class=UserSerializer
+
+    def get_object(self):
+        return self.request.user
+class LogoutView(APIView):
+    def post(self, request, format=None):
+        request.auth.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+class ReigsterView(GenericAPIView):
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Courses(APIView):
+    
+    def get(self, request, format=None):
+        all_courses= Course.objects.all()
+        serializers = CourseSerializer(all_courses, many=True)
+        return Response(serializers.data)
+    
+    def post(self, request, format=None):
+        serializers = CourseSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+ 
     
