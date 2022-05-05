@@ -10,7 +10,7 @@ router.register(r'announcements', AnnouncementsList)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('register/', ReigsterView.as_view()),
+    path('adduser/', ReigsterView.as_view()),
     path('comments/', views.CommentList.as_view()),
     re_path(r'api/comments/(?P<pk>[0-9]+)/$',views.SingleComment.as_view()),
     path('sessions/', views.Sessions.as_view()),
