@@ -33,7 +33,7 @@ class Tm(models.Model):
 
 
 class Student(models.Model):
-    user=models.OneToOneField(User, related_name="employer", on_delete=models.CASCADE)
+    user=models.OneToOneField(User, related_name="student", on_delete=models.CASCADE)
     course=models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
