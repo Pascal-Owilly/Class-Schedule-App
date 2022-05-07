@@ -1,0 +1,11 @@
+__pycache__/
+virtual/
+
+../../Desktop/NewsApi/
+../../Documents/pitch/
+multiuser/__pycache__/
+users/__pycache__/
+
+admin:dan
+pass:123
+
