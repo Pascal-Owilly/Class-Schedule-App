@@ -2,7 +2,7 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 from .views import AnnouncementsList, CommentList
 from . import views
-from .views import (TmOnlyView, StudentOnlyView,LogoutView,ReigsterView,LoginView)
+from .views import (LogoutView,ReigsterView,LoginView)
 
 
 router = routers.DefaultRouter()
@@ -18,8 +18,8 @@ urlpatterns = [
     path('students/', views.Students.as_view()),
     path('courses/', views.Courses.as_view()),
     path('attendance/<int:id>', views.Attendance.as_view()),
-    path('tm/dashboard/', TmOnlyView.as_view(), name='tmdashboard'),
-    path('student/dashboard/', StudentOnlyView.as_view(), name='studentdashboard'),
+    # path('tm/dashboard/', TmOnlyView.as_view(), name='tmdashboard'),
+    # path('student/dashboard/', StudentOnlyView.as_view(), name='studentdashboard'),
     path('profile/<int:id>/', views.Userprofile.as_view()),
     path('login/', LoginView.as_view()),
 ]

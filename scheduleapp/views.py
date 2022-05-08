@@ -142,19 +142,19 @@ class Attendance(APIView):
             return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
     
 
-class StudentOnlyView(generics.RetrieveAPIView):
-    permission_classes=[permissions.IsAuthenticated&IsStudentUser]
-    serializer_class=UserSerializer
+# class StudentOnlyView(generics.RetrieveAPIView):
+#     permission_classes=[permissions.IsAuthenticated&IsStudentUser]
+#     serializer_class=UserSerializer
 
-    def get_object(self):
-        return self.request.user
+#     def get_object(self):
+#         return self.request.user
 
-class TmOnlyView(generics.RetrieveAPIView):
-    permission_classes=[permissions.IsAuthenticated&IsTmUser]
-    serializer_class=UserSerializer
+# class TmOnlyView(generics.RetrieveAPIView):
+#     permission_classes=[permissions.IsAuthenticated&IsTmUser]
+#     serializer_class=UserSerializer
 
-    def get_object(self):
-        return self.request.user
+#     def get_object(self):
+#         return self.request.user
 class LogoutView(APIView):
     def post(self, request, format=None):
         request.auth.delete()
