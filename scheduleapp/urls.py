@@ -17,10 +17,10 @@ urlpatterns = [
     re_path(r'api/sessions/(?P<pk>[0-9]+)/$', views.SingleSession.as_view()),
     path('students/', views.Students.as_view()),
     path('courses/', views.Courses.as_view()),
-    path('attendance/<int:pk>', views.Attendance.as_view()),
+    path('attendance/<int:id>', views.Attendance.as_view()),
     path('tm/dashboard/', TmOnlyView.as_view(), name='tmdashboard'),
     path('student/dashboard/', StudentOnlyView.as_view(), name='studentdashboard'),
-    path('profile/', views.Userprofile.as_view()),
+    path('profile/<int:id>/', views.Userprofile.as_view()),
     path('login/', LoginView.as_view()),
 ]
 

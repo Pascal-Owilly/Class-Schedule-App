@@ -13,6 +13,8 @@ from .models import Announcements, Comments,Course, Profile, Session, Student
 from django.contrib.auth.models import User
 from rest_framework.generics import GenericAPIView
 from django.contrib import auth
+from rest_framework.generics import get_object_or_404
+
 
 # Create your views here.
 class AnnouncementsList(viewsets.ModelViewSet):
@@ -186,11 +188,20 @@ class Courses(APIView):
 
  
 class Userprofile(APIView):  
-    def get(self,request):
-        user = request.user
+    def get(self,request,id):
+        print(id)
+        if id:
+            user = get_object_or_404(User, id=id)
+
+            profile = get_object_or_404(Profile, user=user)
         
-        serializer = ProfileSerializer(user)
-        return Response(serializer.data)
+            Profile_serializer = ProfileSerializer(profile) 
+        
+            return Response(Profile_serializer.data)
+        
+
+
+
 
 class LoginView(GenericAPIView):
     serializer_class= LoginSerializer
