@@ -2,7 +2,7 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 from .views import AnnouncementsList, CommentList
 from . import views
-from .views import (LogoutView,ReigsterView,LoginView)
+from .views import (CustomAuthToken,LogoutView,ReigsterView,LoginView)
 
 
 router = routers.DefaultRouter()
@@ -22,5 +22,6 @@ urlpatterns = [
     # path('student/dashboard/', StudentOnlyView.as_view(), name='studentdashboard'),
     path('profile/<int:id>/', views.Userprofile.as_view()),
     path('login/', LoginView.as_view()),
+    path('login/', CustomAuthToken.as_view(), name='auth-token'),
 ]
 

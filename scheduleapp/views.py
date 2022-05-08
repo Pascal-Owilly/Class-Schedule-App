@@ -4,8 +4,8 @@ from rest_framework import generics, permissions, status,viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, JsonResponse
-# from rest_framework.authtoken.views import ObtainAuthToken
-# from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from .permissions import IsTmUser, IsStudentUser
 from .serializers import AnnouncementSerializers,LoginSerializer, CommentsSerializer, SessionSerializer,UserSerializer,ProfileSerializer,CourseSerializer,AttendanceSerializer,StudentSerializer
@@ -121,19 +121,19 @@ class Students(APIView):
 
 
 class Attendance(APIView):
-    def get_attendance(self, pk):
+    def get_attendance(self, id):
         try:
-            return Attendance.objects.get(pk=pk)
+            return Attendance.objects.get(id=id)
         except Attendance.DoesNotExist:
             return Http404
 
-    def get(self, request, pk, format=None):
-        attendance = self.get_attendance(pk)
+    def get(self, request, id, format=None):
+        attendance = self.get_attendance(id)
         serializer = AttendanceSerializer(attendance)
         return JsonResponse(serializer.data)
 
-    def put(self, request, pk, format=None):
-        attendance = self.get_attendance(pk)
+    def put(self, request, id, format=None):
+        attendance = self.get_attendance(id)
         serializers = AttendanceSerializer(attendance, request.data)
         if serializers.is_valid():
             serializers.save()
@@ -141,20 +141,6 @@ class Attendance(APIView):
         else:
             return JsonResponse(serializers.errors, status=status.HTTP_400_BAD_REQUEST, safe=False)
     
-
-# class StudentOnlyView(generics.RetrieveAPIView):
-#     permission_classes=[permissions.IsAuthenticated&IsStudentUser]
-#     serializer_class=UserSerializer
-
-#     def get_object(self):
-#         return self.request.user
-
-# class TmOnlyView(generics.RetrieveAPIView):
-#     permission_classes=[permissions.IsAuthenticated&IsTmUser]
-#     serializer_class=UserSerializer
-
-#     def get_object(self):
-#         return self.request.user
 class LogoutView(APIView):
     def post(self, request, format=None):
         request.auth.delete()
@@ -221,3 +207,17 @@ class LoginView(GenericAPIView):
 
         #SEDN RES
         return Response({'detail': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer=self.serializer_class(data=request.data, context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        user=serializer.validated_data['user']
+        token, created=Token.objects.get_or_create(user=user)
+        return Response({
+            'token':token.key,
+            'user_id':Profile.pk,
+            'is_student':Profile.is_student,
+            'is_tm':Profile.is_tm
+        })
