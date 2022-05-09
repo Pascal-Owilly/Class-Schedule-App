@@ -21,7 +21,8 @@ urlpatterns = [
     # path('tm/dashboard/', TmOnlyView.as_view(), name='tmdashboard'),
     # path('student/dashboard/', StudentOnlyView.as_view(), name='studentdashboard'),
     path('profile/<int:id>/', views.Userprofile.as_view()),
-    path('login/', LoginView.as_view()),
+    # path('login/', LoginView.as_view()),
     path('login/', CustomAuthToken.as_view(), name='auth-token'),
+    path('getuser/<int:id>/', views.GetUser.as_view()),
 ]
 

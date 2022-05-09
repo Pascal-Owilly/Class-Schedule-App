@@ -154,8 +154,13 @@ class ReigsterView(GenericAPIView):
         serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
+            user=serializer.save()
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({
+            "user":UserSerializer(user, context=self.get_serializer_context()).data,
+            "token":Token.objects.get(user=user).key,
+            "message":"account created successfully"
+        })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Courses(APIView):
@@ -184,7 +189,17 @@ class Userprofile(APIView):
             Profile_serializer = ProfileSerializer(profile) 
         
             return Response(Profile_serializer.data)
+            
+class GetUser(APIView):  
+    def get(self,request,id):
+        print(id)
+        if id:
+            user = get_object_or_404(User, id=id)
+
         
+            User_serializer = UserSerializer(user) 
+        
+            return Response(User_serializer.data)
 
 
 
