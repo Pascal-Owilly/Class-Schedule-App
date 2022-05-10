@@ -154,13 +154,8 @@ class ReigsterView(GenericAPIView):
         serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
-            user=serializer.save()
             serializer.save()
-            return Response({
-            "user":UserSerializer(user, context=self.get_serializer_context()).data,
-            "token":Token.objects.get(user=user).key,
-            "message":"account created successfully"
-        })
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class Courses(APIView):
@@ -222,8 +217,6 @@ class LoginView(GenericAPIView):
 
         #SEDN RES
         return Response({'detail': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer=self.serializer_class(data=request.data, context={'request':request})
@@ -232,7 +225,7 @@ class CustomAuthToken(ObtainAuthToken):
         token, created=Token.objects.get_or_create(user=user)
         return Response({
             'token':token.key,
-            'user_id':Profile.pk,
-            'is_student':Profile.is_student,
-            'is_tm':Profile.is_tm
+            'user_id':user.pk,
+            'is_student':user.is_student,
+            'is_tm':user.is_tm
         })
