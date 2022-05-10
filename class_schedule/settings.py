@@ -172,5 +172,5 @@ REST_FRAMEWORK = {
 }
 
 
-AUTH_USER_MODEL="auth.User"
+AUTH_USER_MODEL="scheduleapp.User"
 ACCOUNT_UNIQUE_EMAIL=True
