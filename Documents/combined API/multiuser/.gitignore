@@ -1,0 +1,8 @@
+__pycache__/
+virtual/
+multiuser/settings.py
+
+../../Desktop/NewsApi/
+../../Documents/pitch/
+multiuser/__pycache__/
+users/__pycache__/
